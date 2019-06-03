@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import items from './data';
+import Client from './Contentful';
+
 // this is equivalent to the createStore method of redux
 const RoomContext = React.createContext();
 
@@ -21,21 +22,31 @@ class RoomProvider extends Component {
   };
 
   // get data from external source
+  getdata= async() => {
+    try {
+      let response = await Client.getEntries({
+        content_type: "beachResort"
+      });
+      let rooms = this.formatData(response.items );
+      let featuredRooms = rooms.filter(room => room.featured === true);
+      let maxPrice = Math.max(...rooms.map(item => item.price))
+      let maxSize = Math.max(...rooms.map(item => item.size))
+      this.setState({
+        rooms,
+        featuredRooms,
+        sortedRooms: rooms,
+        loading: false,
+        price: maxPrice,
+        maxPrice,
+        maxSize
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   componentDidMount(){
-    let rooms = this.formatData(items);
-    let featuredRooms = rooms.filter(room => room.featured === true);
-    let maxPrice = Math.max(...rooms.map(item => item.price))
-    let maxSize = Math.max(...rooms.map(item => item.size))
-    this.setState({
-      rooms,
-      featuredRooms,
-      sortedRooms: rooms,
-      loading: false,
-      price: maxPrice,
-      maxPrice,
-      maxSize
-    });
+    this.getdata();
   }
 
   getRoom = (slug) => {
@@ -97,7 +108,6 @@ class RoomProvider extends Component {
     }
 
     // filter by pets
-    console.log('>>>>>>>>>>>>>>the pets are', pets)
     if(pets){
       tempRooms = tempRooms.filter(room => room.pets === true)
     }

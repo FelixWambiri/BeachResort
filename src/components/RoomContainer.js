@@ -7,7 +7,6 @@ import Loading from './Loading';
 
 function RoomContainer({context}){
   const {loading, sortedRooms, rooms} = context;
-  console.log('the sorted rooms are', sortedRooms)
   if(loading)return <Loading/>
     return (
       <>

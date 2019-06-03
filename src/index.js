@@ -4,12 +4,15 @@ import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { RoomProvider } from './Context';
+import Firebase, { FirebaseContext } from '../src/Authentication/firebase';
 
 ReactDOM.render(
   <RoomProvider>
-    <Router>
-      <App />
-    </Router>
+    <FirebaseContext.Provider value={new Firebase()}>
+      <Router>
+        <App />
+      </Router>
+    </FirebaseContext.Provider>
   </RoomProvider>,
 document.getElementById('root'));
 

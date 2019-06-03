@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FaAlignRight } from 'react-icons/fa';
-import logo from '../images/logo.svg'
+import logo from '../images/logo.svg';
+import SignOutButton from './signout';
+import { AuthUserContext } from '../session';
 
-export default class Navbar extends Component {
+class Navbar extends Component {
   state = {
     isOpen: false,
   }
@@ -28,11 +30,33 @@ export default class Navbar extends Component {
             <FaAlignRight className="nav-icon"/>
           </button>
         </div>
-        <ul className={this.state.isOpen ? "nav-links show-nav" : "nav-links" }>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/rooms">Rooms</Link></li>
-        </ul>
+          <AuthUserContext.Consumer>
+            {authUser =>
+              authUser ? <NavigationAuth state={this.state} /> : <NavigationNonAuth state={this.state} />
+            }
+          </AuthUserContext.Consumer>
       </div>
     </nav>
   }
 }
+
+
+const NavigationAuth = ({state}) => (
+  <ul className={state.isOpen ? "nav-links show-nav" : "nav-links" }>
+    <li><Link to="/">Home</Link></li>
+    <li><Link to="/rooms">Rooms</Link></li>
+    <li>
+      <SignOutButton />
+    </li>
+  </ul>
+);
+
+
+const NavigationNonAuth = ({state}) =>(
+  <ul className={state.isOpen ? "nav-links show-nav" : "nav-links" }>
+    <li><Link to="/">Home</Link></li>
+    <li><Link to="/signin">Login</Link></li>
+  </ul>
+);
+
+export default Navbar;

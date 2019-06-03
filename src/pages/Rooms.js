@@ -3,8 +3,9 @@ import Hero from '../components/Hero';
 import Banner from '../components/Banner';
 import { Link } from 'react-router-dom';
 import RoomsContainer from '../components/RoomContainer';
+import { withAuthorization } from '../session';
 
-export default function Rooms() {
+function Rooms() {
   return (
     <>
       <Hero hero="roomsHero">
@@ -16,3 +17,5 @@ export default function Rooms() {
     </>
   );
 };
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(Rooms)

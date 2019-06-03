@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import defaultBcg from '../images/room-1.jpeg';
-import Hero from '../components/Hero';
 import Banner from '../components/Banner';
 import { Link } from 'react-router-dom';
 import { RoomContext } from '../Context';
 import StyledHero from '../components/styledHero';
+import { withAuthorization } from '../session';
 
-export default class SingleRoom extends Component {
+class SingleRoom extends Component {
   constructor(props){
     super(props)
     this.state ={
@@ -80,3 +80,6 @@ export default class SingleRoom extends Component {
     );
   }
 }
+
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(SingleRoom)
